@@ -1,25 +1,24 @@
 import tkinter as tk
-
+from numberbaseball import NumberBaseballGame
 
 class Calculator:
     def __init__(self, root):
         self.root = root
         self.root.title("계산기")
         self.root.geometry("300x400")
+        self.baseball_window = None
 
         self.expression = ""
 
-        # 입력창
         self.entry = tk.Entry(root, font=("Arial", 24), justify="right")
         self.entry.pack(fill="both", ipadx=8, ipady=15, padx=10, pady=10)
 
-        # 버튼 생성
         buttons = [
             ['7', '8', '9', '/'],
             ['4', '5', '6', '*'],
             ['1', '2', '3', '-'],
             ['0', '.', 'C', '+'],
-            ['=']
+            ['=', '숫자야구']
         ]
 
         for row in buttons:
@@ -42,11 +41,21 @@ class Calculator:
                 self.expression = str(eval(self.expression))
             except Exception:
                 self.expression = "에러"
+        elif char == '숫자야구':
+            self.open_number_baseball()
         else:
             self.expression += str(char)
 
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, self.expression)
 
+    def open_number_baseball(self):
+        if self.baseball_window is not None and self.baseball_window.winfo_exists():
+            return
+        
+        self.baseball_window = tk.Toplevel(self.root)
+        NumberBaseballGame(self.baseball_window, self)
 
+    def clear_baseball_window(self):
+        self.baseball_window = None
 
